@@ -107,6 +107,14 @@ public class RestApiClient {
         }
         
         /**
+         * Execute PATCH and return deserialized object
+         */
+        public <T> T patchAndGet(String endpoint, Class<T> responseType) {
+            Response response = patch(endpoint);
+            return response.as(responseType);
+        }
+        
+        /**
          * Execute GET and return deserialized object
          */
         public <T> T getAndExtract(String endpoint, Class<T> responseType) {
