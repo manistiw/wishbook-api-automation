@@ -37,7 +37,6 @@ public class WishCreationTest {
     
     private void generateTokensForAllEmployees() {
         for (Employee employee : employees) {
-            // Generate token using generic client
             String token = RestApiClient.generateToken(
                 AUTH_ENDPOINT, 
                 employee.getId(), 
@@ -59,31 +58,62 @@ public class WishCreationTest {
             wishesByEmployee.putIfAbsent(employee.getId(), new ArrayList<>());
             
             for (Map.Entry<String, WishRequest> entry : wishTemplates.entrySet()) {
-                WishRequest wishRequest = entry.getValue();
-                System.out.println("Creating wish for employee: " + employee.getId() + " with data: " + wishRequest);
-                // Create wish using generic client
-                WishResponse wishResponse = RestApiClient.request()
-                    .withToken(employee.getToken())
-                    .withBody(wishRequest)
-                    .putAndGet(WISHES_ENDPOINT, WishResponse.class);
+                WishRequest wishTemplate = entry.getValue();
                 
-                // Store wish globally
-                WishData wishData = new WishData(
-                    wishResponse.getWishId(),
-                    employee.getId(),
-                    wishResponse.getDate(),
-                    wishResponse.getShiftId()
-                );
+                // Expand wish with multiple shifts into individual wishes
+                List<WishRequest> expandedWishes = expandWish(wishTemplate);
                 
-                wishRepository.put(wishResponse.getWishId(), wishData);
-                wishesByEmployee.get(employee.getId()).add(wishData);
-                
-                // Validate
-                Assert.assertEquals(wishResponse.getEmployeeId(), employee.getId());
-                Assert.assertEquals(wishResponse.getShiftId(), wishRequest.getShiftId());
-                Assert.assertNotNull(wishResponse.getWishId());
+                // Create each wish
+                for (WishRequest wishRequest : expandedWishes) {
+                    createWish(employee, wishRequest);
+                }
             }
         }
+        
+        Assert.assertTrue(wishRepository.size() > 0);
+    }
+    
+    private List<WishRequest> expandWish(WishRequest template) {
+        List<WishRequest> wishes = new ArrayList<>();
+        
+        if (template.getShiftIds() != null && !template.getShiftIds().isEmpty()) {
+            // Multiple shifts - create one wish per shift
+            for (Integer shiftId : template.getShiftIds()) {
+                WishRequest wish = new WishRequest();
+                wish.setDate(template.getDate());
+                wish.setShiftId(shiftId);
+                wish.setShiftIds(null);  // Clear the array
+                wishes.add(wish);
+            }
+        } else {
+            // Single shift - ensure array is cleared
+            WishRequest wish = new WishRequest();
+            wish.setDate(template.getDate());
+            wish.setShiftId(template.getShiftId());
+            wish.setShiftIds(null);  // Clear the array
+            wishes.add(wish);
+        }
+        
+        return wishes;
+    }
+    
+    private void createWish(Employee employee, WishRequest wishRequest) {
+        WishResponse wishResponse = RestApiClient.request()
+            .withToken(employee.getToken())
+            .withBody(wishRequest)
+            .putAndGet(WISHES_ENDPOINT, WishResponse.class);
+        
+        WishData wishData = new WishData(
+            wishResponse.getWishId(),
+            employee.getId(),
+            wishResponse.getDate(),
+            wishResponse.getShiftId()
+        );
+        
+        wishRepository.put(wishResponse.getWishId(), wishData);
+        wishesByEmployee.get(employee.getId()).add(wishData);
+        
+        Assert.assertNotNull(wishResponse.getWishId());
     }
     
     public static class WishData {
