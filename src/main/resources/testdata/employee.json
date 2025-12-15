@@ -1,0 +1,40 @@
+{
+  "employees": [
+    {
+      "id": "EMP005",
+      "name": "Robert Brown",
+      "role": "ADMIN",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.admin_token"
+    },
+    {
+      "id": "EMP001",
+      "name": "John Doe",
+      "role": "EMPLOYEE",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.emp001_token"
+    },
+    {
+      "id": "EMP002",
+      "name": "Jane Smith",
+      "role": "EMPLOYEE",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.emp002_token"
+    },
+    {
+      "id": "EMP003",
+      "name": "Mike Johnson",
+      "role": "EMPLOYEE",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.emp003_token"
+    },
+    {
+      "id": "EMP004",
+      "name": "Sarah Williams",
+      "role": "EMPLOYEE",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.emp004_token"
+    },
+    {
+      "id": "EMP006",
+      "name": "Serena Williams",
+      "role": "EMPLOYEE",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.emp006_token"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Wishbook API Test Suite" verbose="1">
+
+    <parameter name="base.url" value="http://localhost:3000"/>
+
+    <test name="Wish Creation Tests" preserve-order="true">
+        <classes>
+            <class name="com.wishbook.tests.WishCreationTest">
+                <methods>
+                    <include name="testCreateWishesForAllEmployees"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+</suite>
