@@ -52,43 +52,4 @@ public class TestDataLoader {
                 new TypeReference<Map<String, WishRequest>>() {}
         );
     }
-
-    /**
-     * Load JSON from file and convert to specified class
-     */
-    public static <T> T loadJson(String fileName, Class<T> clazz) throws IOException {
-        String filePath = TEST_DATA_PATH + fileName;
-        InputStream inputStream = TestDataLoader.class.getResourceAsStream(filePath);
-
-        if (inputStream == null) {
-            throw new IOException("File not found: " + filePath);
-        }
-
-        return objectMapper.readValue(inputStream, clazz);
-    }
-
-    /**
-     * Load JSON from file and convert to list of specified class
-     */
-    public static <T> List<T> loadJsonList(String fileName, Class<T> clazz) throws IOException {
-        String filePath = TEST_DATA_PATH + fileName;
-        InputStream inputStream = TestDataLoader.class.getResourceAsStream(filePath);
-
-        if (inputStream == null) {
-            throw new IOException("File not found: " + filePath);
-        }
-
-        // Use TypeReference for List types
-        return objectMapper.readValue(
-                inputStream,
-                objectMapper.getTypeFactory().constructCollectionType(List.class, clazz)
-        );
-    }
-
-    /**
-     * Convert object to JSON string
-     */
-    public static String toJson(Object object) throws IOException {
-        return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
-    }
 }

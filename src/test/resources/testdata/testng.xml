@@ -4,11 +4,7 @@
     <parameter name="base.url" value="http://localhost:3000"/>
     <test name="Wish Creation Tests" preserve-order="true">
         <classes>
-            <class name="com.wishbook.tests.WishCreationTest">
-                <methods>
-                    <include name="testCreateWishesForAllEmployees"/>
-                </methods>
-            </class>
+            <class name="com.wishbook.tests.WishCreationTest"/>
         </classes>
     </test>
 </suite>

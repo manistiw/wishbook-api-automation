@@ -46,42 +46,4 @@ public class WishHelper {
             .withBody(wishRequest)
             .putAndGet(WISHES_ENDPOINT, WishResponse.class);
     }
-    
-    /**
-     * Create a wish and return only the wish ID
-     */
-    public static String createWishAndGetId(String token, WishRequest wishRequest) {
-        WishResponse response = createWish(token, wishRequest);
-        return response.getWishId();
-    }
-    
-    /**
-     * Update a wish
-     */
-    public static WishResponse updateWish(String token, String wishId, WishRequest updateRequest) {
-        return RestApiClient.request()
-            .withToken(token)
-            .withBody(updateRequest)
-            .putAndGet(WISHES_ENDPOINT + "/" + wishId, WishResponse.class);
-    }
-    
-    /**
-     * Delete a wish
-     */
-    public static void deleteWish(String token, String wishId) {
-        RestApiClient.request()
-            .withToken(token)
-            .delete(WISHES_ENDPOINT + "/" + wishId);
-    }
-    
-    /**
-     * Get wishes for a date and shift
-     */
-    public static WishResponse[] getWishes(String token, String date, Integer shiftId) {
-        return RestApiClient.request()
-            .withToken(token)
-            .withQueryParam("date", date)
-            .withQueryParam("shiftId", String.valueOf(shiftId))
-            .getAndExtract(WISHES_ENDPOINT, WishResponse[].class);
-    }
 }
